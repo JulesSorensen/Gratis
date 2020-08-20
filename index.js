@@ -23,15 +23,25 @@ client.on('message', msg => {
 
         //}
     }
+
+    // subs
     if (msg.content.toLowerCase().startsWith(prefix + "sub")) {
         if (!datasub[msg.author.id] || datasub[msg.author.id] === "0") {
             datasub[msg.author.id] = "1"
             fs.writeFile("./data/sub.json", JSON.stringify(datasub), err => {
                 if (err) throw err;
-                msg.channel.send("C'est fait !")
+                msg.channel.send("Done!")
             })
         }
-    } else msg.channel.send("")
+    } else msg.channel.send("You are already a subscriber!")
+        // unsubs
+    if (msg.content.toLowerCase().startsWith(prefix + "unsub")) {
+        if (datasub[msg.author.id] || datasub[msg.author.id] === "1") {
+            delete datasub[msg.author.id]
+            msg.channel.send("Done!")
+        }
+    } else msg.channel.send("You are not a subscriber!")
+
 })
 
 client.login(process.env.TOKEN);
