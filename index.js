@@ -26,7 +26,7 @@ client.on('message', msg => {
     if (msg.content.toLowerCase().startsWith(prefix + "sub")) {
         if (datasub[msg.author.id] || datasub[msg.author.id] === "0") {
             datasub[msg.author.id] = "1"
-            fs.writeFile("./data/sub.json", JSON.stringify(client.msgs, null, 4), err => {
+            fs.writeFile("./data/sub.json", JSON.stringify(datasub), err => {
                 if (err) throw err;
                 msg.channel.send("C'est fait !")
             })
