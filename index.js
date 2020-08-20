@@ -19,9 +19,9 @@ client.on('ready', () => {
 client.on('message', msg => {
     if (msg.content.toLowerCase().startsWith(prefix + "ann")) {
         if (!msg.author.id === "448052818314526721") return;
-        for (let i = 1, i < datasub.length, i++) {
+        //for (let i = 1, i < datasub.length, i++) {
 
-        }
+        //}
     }
     if (msg.content.toLowerCase().startsWith(prefix + "sub")) {
         if (datasub[msg.author.id] || datasub[msg.author.id] === "0") {
