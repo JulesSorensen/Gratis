@@ -5,7 +5,7 @@ let prefix = config.prefix;
 const client = new Discord.Client();
 const fs = require('fs');
 var datasub = ["697717795227697173", "448052818314526721", "676690539126718467", "364759830944153605", "639501477420990494", "328925921283145729", "278211495915945985", "358551694654832642", "364758930615828490", "340046482357092354"];
-var version = "1.1.0"
+var version = "1.1.1"
 
 client.on('ready', () => {
     console.log(`${client.user.username} ready!`)
