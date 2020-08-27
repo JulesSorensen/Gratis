@@ -76,6 +76,26 @@ client.on('message', msg => {
                 msg2.react("745999683335225444")
             })
         }
+        let customchannel = client.channels.cache.get("690873444891361313")
+        customchannel.send({
+            embed: {
+                color: 15990579,
+                thumbnail: {
+                    url: arg[6]
+                },
+                author: {
+                    name: "New " + typedecontenu + " recoverable for free!\n­"
+                },
+                title: "⇒ " + gamename + " on " + arg[2] + " ⇐\n­",
+                url: arg[5],
+                description: "Price: ~~" + arg[4] + "~~ FREE!\nEnding: " + datehour,
+                footer: {
+                    text: "Gratis Version " + version + " by Nekewo#3347 | Type *help for more informations!"
+                }
+            }
+        }).then(msg2 => {
+            msg2.react("745999683335225444")
+        })
     }
 
     // help
