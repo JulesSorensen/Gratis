@@ -4,7 +4,8 @@ const config = require("./config/config.json");
 let prefix = config.prefix;
 const client = new Discord.Client();
 const fs = require('fs');
-var datasub = ["697717795227697173", "448052818314526721", "676690539126718467", "364759830944153605", "639501477420990494", "328925921283145729", "278211495915945985", "358551694654832642", "364758930615828490"];
+var datasub = ["697717795227697173", "448052818314526721", "676690539126718467", "364759830944153605", "639501477420990494", "328925921283145729", "278211495915945985", "358551694654832642", "364758930615828490", "340046482357092354"];
+var version = "1.1.0"
 
 client.on('ready', () => {
     console.log(`${client.user.username} ready!`)
@@ -29,7 +30,49 @@ client.on('message', msg => {
         }
         for (let i = 0; i < datasub.length; i++) {
             let authoruser = client.users.cache.get(datasub[i])
-            authoruser.send(ann).then(msg2 => {
+            authoruser.send(ann)
+        }
+    }
+
+    // game
+    if (msg.content.toLowerCase().startsWith(prefix + "f")) {
+        if (msg.content.toLowerCase().startsWith(prefix + "fdlc")) {
+            typedecontenu = "DLC"
+        } else { typedecontenu = "game" }
+        if (msg.author.id !== "448052818314526721") return;
+        const arg = msg.content.slice(prefix.length).split(' ');
+        // arg[1] titre, 2 plateforme, 3 date, 4 ancien prix, 5 lien, 6 image
+        // game name without "_" character for spaces
+        arg_gm = arg[1].split("_")
+        gamename = ""
+        for (let i = 0; i < arg_gm.length; i++) {
+            gamename = gamename + " " + arg_gm[i]
+        }
+        // same for the hour of date
+        org_date = arg[3].split("_")
+        datehour = ""
+        for (let i = 0; i < org_date.length; i++) {
+            datehour = datehour + " " + org_date[i]
+        }
+        for (let i = 0; i < datasub.length; i++) {
+            let authoruser = client.users.cache.get(datasub[i])
+            authoruser.send({
+                embed: {
+                    color: 15990579,
+                    thumbnail: {
+                        url: arg[6]
+                    },
+                    author: {
+                        name: "New " + typedecontenu + " recoverable for free!\n­"
+                    },
+                    title: "⇒ " + gamename + " on " + arg[2] + " ⇐\n­",
+                    url: arg[5],
+                    description: "Price: ~~" + arg[4] + "~~ FREE!\nEnding: " + datehour,
+                    footer: {
+                        text: "Gratis Version " + version + " by Nekewo#3347 | Type *help for more informations!"
+                    }
+                }
+            }).then(msg2 => {
                 msg2.react("745999683335225444")
             })
         }
@@ -47,7 +90,8 @@ client.on('message', msg => {
                     name: "Help command",
                     icon_url: msg.author.avatarURL()
                 },
-                title: "Here is the list of my commands!\n­",
+                title: "Here is some commands and tips!\n­",
+                description: "Gratis is a robot developed to inform you by private message, or in channels of your choice (coming soon), of free game offers temporarily! So, don't miss anything anymore!\n­",
                 fields: [{
                     name: "`" + prefix + "subscribe`",
                     value: "Once this command has been sent, you will receive a message every time a game is free temporarily, you won't be able to miss anything!\nYou can also type " + prefix + "sub\n­"
@@ -57,7 +101,7 @@ client.on('message', msg => {
                 }],
                 timestamp: new Date(),
                 footer: {
-                    text: "Gratis Version 1.0.0 | Help command requested by " + msg.author.tag
+                    text: "Gratis Version " + version + " | Help command requested by " + msg.author.tag
                 }
             }
         })
