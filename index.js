@@ -5,7 +5,7 @@ let prefix = config.prefix;
 const client = new Discord.Client();
 const fs = require('fs');
 var datasub = ["697717795227697173", "448052818314526721", "676690539126718467", "364759830944153605", "639501477420990494", "328925921283145729", "278211495915945985", "358551694654832642", "364758930615828490", "340046482357092354"];
-var version = "1.1.1"
+var version = "1.1.2"
 
 client.on('ready', () => {
     console.log(`${client.user.username} ready!`)
@@ -38,6 +38,8 @@ client.on('message', msg => {
     if (msg.content.toLowerCase().startsWith(prefix + "f")) {
         if (msg.content.toLowerCase().startsWith(prefix + "fdlc")) {
             typedecontenu = "DLC"
+        } else if (msg.content.toLowerCase().startsWith(prefix + "fkeys")) {
+            typedecontenu = "keys"
         } else { typedecontenu = "game" }
         if (msg.author.id !== "448052818314526721") return;
         const arg = msg.content.slice(prefix.length).split(' ');
@@ -49,11 +51,18 @@ client.on('message', msg => {
             gamename = gamename + " " + arg_gm[i]
         }
         // same for the hour of date
-        org_date = arg[3].split("_")
+        arg_date = arg[3].split("_")
         datehour = ""
-        for (let i = 0; i < org_date.length; i++) {
-            datehour = datehour + " " + org_date[i]
+        for (let i = 0; i < arg_date.length; i++) {
+            datehour = datehour + " " + arg_date[i]
         }
+        // same for the plateforme
+        arg_plateforme = arg[2].split("_")
+        plateforme = ""
+        for (let i = 0; i < arg_plateforme.length; i++) {
+            plateforme = plateforme + " " + arg_plateforme[i]
+        }
+        // send to all users
         for (let i = 0; i < datasub.length; i++) {
             let authoruser = client.users.cache.get(datasub[i])
             authoruser.send({
@@ -65,7 +74,7 @@ client.on('message', msg => {
                     author: {
                         name: "New " + typedecontenu + " recoverable for free!\n­"
                     },
-                    title: "⇒ " + gamename + " on " + arg[2] + " ⇐\n­",
+                    title: "⇒ " + gamename + " on " + plateforme + " ⇐\n­",
                     url: arg[5],
                     description: "Price: ~~" + arg[4] + "~~ FREE!\nEnding: " + datehour,
                     footer: {
