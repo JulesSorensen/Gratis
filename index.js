@@ -5,7 +5,7 @@ const client = new Discord.Client();
 const fs = require('fs');
 var datasub = ["697717795227697173", "448052818314526721", "676690539126718467", "364759830944153605", "639501477420990494", "328925921283145729", "278211495915945985", "358551694654832642", "364758930615828490", "340046482357092354"];
 var datachannel = ["750369888366755910", "690873444891361313"]
-var version = "2.0.0"
+var version = "2.0.1"
 
 client.on('ready', () => {
     console.log(`${client.user.username} prêt !`)
@@ -100,7 +100,9 @@ client.on('message', msg => {
                                             }).then(msg2 => {
                                                 msg2.react("745999683335225444")
                                             })
-                                            if (datachannel[i] === "750369888366755910") return msg.channel.send("<@>")
+                                            if (datachannel[i] === "750369888366755910") {
+                                                customchannel.send("<@&750654847874891877>")
+                                            }
                                         }
                                     }
                                     msg.channel.send("Merci, ça marche !")
