@@ -5,7 +5,7 @@ const client = new Discord.Client();
 const fs = require('fs');
 var datasub = ["697717795227697173", "448052818314526721", "676690539126718467", "364759830944153605", "639501477420990494", "328925921283145729", "278211495915945985", "358551694654832642", "364758930615828490", "340046482357092354"];
 var datachannel = ["750369888366755910", "690873444891361313"]
-var version = "2.0.1"
+var version = "2.0.2"
 
 client.on('ready', () => {
     console.log(`${client.user.username} prêt !`)
@@ -41,7 +41,7 @@ client.on('message', msg => {
         // type
         if (msg.content.toLowerCase().startsWith(prefix + "fdlc")) {
             typedecontenu = "DLC"
-        } else if (msg.content.toLowerCase().startsWith(prefix + "fkeys")) {
+        } else if (msg.content.toLowerCase().startsWith(prefix + "fkey")) {
             typedecontenu = "tirage de clefs"
         } else if (msg.content.toLowerCase().startsWith(prefix + "fftp")) {
             typedecontenu = "jeu FTP"
