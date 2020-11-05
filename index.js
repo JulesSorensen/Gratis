@@ -3,22 +3,26 @@ const config = require("./config/config.json");
 let prefix = config.prefix;
 const client = new Discord.Client();
 const fs = require('fs');
-var datasub = ["697717795227697173", "448052818314526721", "676690539126718467", "364759830944153605", "639501477420990494", "328925921283145729", "278211495915945985", "358551694654832642", "364758930615828490", "340046482357092354"];
-var datachannel = ["750369888366755910"]
-var version = "2.0.3"
+const { TIMEOUT } = require("dns");
+var datachannel = ["773620179866353675"]
+var version = "2.1.0"
 
 client.on('ready', () => {
-    console.log(`${client.user.username} prêt !`)
+    console.log(`${client.user.username} est prêt !`)
     client.user.setPresence({
         activity: {
-            name: 'des jeux gratuits !',
-            type: "PLAYING",
+            name: '*help',
+            type: "WATCHING",
         },
         status: "dnd"
     });
 });
 
 client.on('message', msg => {
+    // auto delete
+    if (msg.channel.id == "773623491927998475") {
+        msg.delete({ timeout: 10000 }).catch("")
+    }
 
     // announce
     if (msg.content.toLowerCase().startsWith(prefix + "ann")) {
@@ -56,16 +60,42 @@ client.on('message', msg => {
                 plateform = collected.first().content
                 msg.channel.send("Très bien, quand est-ce que **l'offre se termine (UTC+2)** ?\n*Si vous voulez annuler la commande, attendez 60 secondes !*")
                 msg.channel.awaitMessages(m => m.author.id == msg.author.id, { max: 1, time: 60000 }).then(collected => {
-                    enddate = collected.first().content
-                    msg.channel.send("Ca marche, quel était **son prix initial** ? Tapez `FTP` si c'est un jeu gratuit de base.\n*Si vous voulez annuler la commande, attendez 60 secondes !*")
+                    if (collected.first().content == "?") { enddate = "Inconnue"; } else { enddate = collected.first().content + "\n     UTC+2\n­"; };
+                    msg.channel.send("Ca marche, quel était **son prix initial** ? Tapez `?` si c'est un jeu gratuit de base ou si c'est inconnu.\n*Si vous voulez annuler la commande, attendez 60 secondes !*")
                     msg.channel.awaitMessages(m => m.author.id == msg.author.id, { max: 1, time: 60000 }).then(collected => {
-                        price = collected.first().content
+                        if (collected.first().content == "?") { price = "GRATUIT !\n"; } else { price = "GRATUIT !\n ~~" + collected.first().content + "~~"; };
                         msg.channel.send("Ok, quel est **le lien** vers cette offre ?\n*Si vous voulez annuler la commande, attendez 60 secondes !*")
                         msg.channel.awaitMessages(m => m.author.id == msg.author.id, { max: 1, time: 60000 }).then(collected => {
                             gamelink = collected.first().content
-                            msg.channel.send("Et pour finir, si vous le souhaitez, avez-vous **le lien d'une image** ? Si non, tapez `NON`!\n*Si vous voulez annuler la commande, attendez 60 secondes !*")
+                            msg.channel.send("Et pour finir, si vous le souhaitez, avez-vous **le lien d'une image** ? Si non, tapez `?`!\n*Si vous voulez annuler la commande, attendez 60 secondes !*")
                             msg.channel.awaitMessages(m => m.author.id == msg.author.id, { max: 1, time: 60000 }).then(collected => {
-                                if (collected.first().content.toLocaleLowerCase() === "non") { imagelink = "" } else { imagelink = collected.first().content }
+                                if (collected.first().content.toLocaleLowerCase() === "?") { imagelink = "https://i.imgur.com/RIRj172.png" } else { imagelink = collected.first().content }
+                                msg.channel.send({
+                                    embed: {
+                                        color: 1222912,
+                                        thumbnail: {
+                                            url: imagelink
+                                        },
+                                        author: {
+                                            name: "Nouveau " + typedecontenu + " récupérable gratuitement !\n­"
+                                        },
+                                        title: "⇒ " + gamename + " sur " + plateform + " ⇐\n­",
+                                        url: gamelink,
+                                        description: desc,
+                                        fields: [{
+                                            name: "💰  ­  Prix  ­  💰",
+                                            value: price,
+                                            inline: true
+                                        }, {
+                                            name: "🕛  ­  Date de fin  ­  🕛",
+                                            value: enddate,
+                                            inline: true
+                                        }],
+                                        footer: {
+                                            text: "Glede Version " + version + " par Nekewo#3347 | Tapez *aide pour plus d'informations !"
+                                        }
+                                    }
+                                })
                                 msg.channel.send("Voulez-vous confirmer l'envoi ?\nTapez `OUI` ou `NON` !")
                                 msg.channel.awaitMessages(m => m.author.id == msg.author.id, { max: 1, time: 60000 }).then(collected => {
                                     if (collected.first().content.toLowerCase() === "oui") {
@@ -86,37 +116,35 @@ client.on('message', msg => {
                                                     description: desc,
                                                     fields: [{
                                                         name: "💰  ­  Prix  ­  💰",
-                                                        value: "GRATUIT !\n~~" + price + "~~",
+                                                        value: price,
                                                         inline: true
                                                     }, {
                                                         name: "🕛  ­  Date de fin  ­  🕛",
-                                                        value: enddate + "\n     UTC+2\n­",
+                                                        value: enddate,
                                                         inline: true
                                                     }],
                                                     footer: {
-                                                        text: "Gratis Version " + version + " par Nekewo#3347 | Tapez *aide pour plus d'informations !"
+                                                        text: "Glede Version " + version + " par Nekewo#3347 | Tapez *aide pour plus d'informations !"
                                                     }
                                                 }
                                             }).then(msg2 => {
                                                 msg2.react("745999683335225444")
                                             })
-                                            if (datachannel[i] === "750369888366755910") {
-                                                customchannel.send("<@&750654847874891877>")
-                                            }
                                         }
                                     }
                                     msg.channel.send("Merci, ça marche !")
-                                }).catch(() => { message.reply('Annulé.'); });
-                            }).catch(() => { message.reply('Annulé.'); });
-                        }).catch(() => { message.reply('Annulé.'); });
-                    }).catch(() => { message.reply('Annulé.'); });
-                }).catch(() => { message.reply('Annulé.'); });
-            }).catch(() => { message.reply('Annulé.'); });
+                                }).catch(() => { msg.channel.send('Annulé.'); });
+                            }).catch(() => { msg.channel.send('Annulé.'); });
+                        }).catch(() => { msg.channel.send('Annulé.'); });
+                    }).catch(() => { msg.channel.send('Annulé.'); });
+                }).catch(() => { msg.channel.send('Annulé.'); });
+            }).catch(() => { msg.channel.send('Annulé.'); });
         })
     }
 
     // help
     if (msg.content.toLowerCase().startsWith(prefix + "aide") || msg.content.toLowerCase().startsWith(prefix + "help")) {
+        if (msg.author.id !== "448052818314526721") return msg.channel.send("Cette commande est privée pour le moment");
         msg.channel.send({
             embed: {
                 color: 7506394,
@@ -128,7 +156,7 @@ client.on('message', msg => {
                     icon_url: msg.author.avatarURL()
                 },
                 title: "Voilà quelques commandes avec leurs significations !\n­",
-                description: "Gratis est un robot développé dans le but de vous informer à la sortie d'offres gratuites plus que vous ne puissiez plus rien rater !\n­",
+                description: "Glede est un robot développé dans le but de vous informer à la sortie d'offres gratuites plus que vous ne puissiez plus rien rater !\n­",
                 fields: [{
                     name: "`" + prefix + "channel [on/off]`",
                     value: "Si vous l'activez en mettant \"on\", vous serez informé des offres gratuites dans le salon où vous avez entré la commande. Si vous le désactivez en mettant \"off\", vous désactiverez cet option dans le salon où vous l'avez entré. Vous avez besoin de la permission administrateur pour utiliser cette commande !"
@@ -137,11 +165,11 @@ client.on('message', msg => {
                     value: "Grâce à ça, vous pourrez inviter le robot sur votre serveur ! Vous pouvez aussi taper " + prefix + "inv\n"
                 }, {
                     name: "`" + prefix + "serveur`",
-                    value: "Permet d'avoir l'invitation du serveur de Nekewo, créateur de Gratis, pour pouvoir recevoir une mention à chaque sortie d'offre.\n­"
+                    value: "Permet d'avoir l'invitation du serveur de Nekewo, créateur de Glede, pour pouvoir recevoir une mention à chaque sortie d'offre.\n­"
                 }],
                 timestamp: new Date(),
                 footer: {
-                    text: "Gratis Version " + version + " | Demande d'aide réclamé par " + msg.author.tag
+                    text: "Glede Version " + version + " | Demande d'aide réclamé par " + msg.author.tag
                 }
             }
         })
@@ -149,41 +177,37 @@ client.on('message', msg => {
 
     // channels
     if (msg.content.toLowerCase().startsWith(prefix + "channel") || msg.content.toLowerCase().startsWith(prefix + "salon")) {
+        if (msg.author.id !== "448052818314526721") return msg.channel.send("Cette commande est privée pour le moment");
         const arg = msg.content.slice(prefix.length).split(' ');
         if (!msg.member.hasPermission('ADMINISTRATOR')) return msg.channel.send("Vous n'êtes pas administrateur !");
         result = 0
         if (arg[1] === "on") {
             for (let i = 0; i < datachannel.length; i++) {
                 if (datachannel[i] === msg.channel.id) {
-                    result = 1
+                    return msg.channel.send("Le salon est déjà inscrit, tapez `" + prefix + "channel off` pour le désinscrire.");
                 }
             }
-            if (result = 1) { msg.channel.send("Le salon est déjà inscrit, tapez `" + prefix + "channel off` pour le désinscrire.") } else {
-                msg.channel.send("Fait !")
-                datachannel.push(msg.channel.id)
-                let wilfre = client.users.cache.get('448052818314526721')
-                wilfre.send(`➕ Le salon ${msg.channel.id} veut être enregistré par ${msg.author} !`)
-            }
+            msg.channel.send("Fait !")
+            datachannel.push(msg.channel.id)
+            let wilfre = client.users.cache.get('448052818314526721')
+            wilfre.send(`➕ Le salon ${msg.channel.id} veut être enregistré par ${msg.author} !`)
         } else if (arg[1] === "off") {
             for (let i = 0; i < datachannel.length; i++) {
                 if (datachannel[i] === msg.channel.id) {
-                    result = 1
+                    msg.channel.send("Compris ! Cela peut prendre du temps, donc merci de patienter.")
+                    datachannel.push(msg.channel.id)
+                    let wilfre = client.users.cache.get('448052818314526721')
+                    wilfre.send(`➖ Le salon ${msg.channel.id} veut être supprimé par ${msg.author} !`)
+                    return;
                 }
             }
-            if (result === 0) { msg.channel.send("Le salon n'est pas inscrit, tapez `" + prefix + "channel on` pour l'inscrire.") } else {
-                msg.channel.send("Compris ! Cela peut prendre du temps, donc merci de patienter.")
-                datachannel.push(msg.channel.id)
-                let wilfre = client.users.cache.get('448052818314526721')
-                wilfre.send(`➖ Le salon ${msg.channel.id} veut être supprimé par ${msg.author} !`)
-            }
+            msg.channel.send("Le salon n'est pas inscrit, tapez `" + prefix + "channel on` pour l'inscrire.")
         } else { msg.channel.send("Tapez `" + prefix + "channel on` pour l'inscrire, ou `" + prefix + "channel off` pour le désinscrire.") }
     }
 
     // invite
     if (msg.content.toLowerCase().startsWith(prefix + "inv")) return msg.channel.send(`Voici le lien si vous souhaitez que j'aille dans votre serveur !\nhttps://discord.com/oauth2/authorize?client_id=745956285391831110&scope=bot&permissions=604368121`)
 
-    // serveur FWT
-    if (msg.content.toLowerCase().startsWith(prefix + "serv")) return msg.channel.send(`Voici le lien pour vous rendre sur le serveur de FWT, géré notamment par Nekewo !\nhttps://discord.gg/TqsPtnT`)
 
 })
 
