@@ -5,7 +5,7 @@ const client = new Discord.Client();
 const fs = require('fs');
 const { TIMEOUT } = require("dns");
 var datachannel = ["773620179866353675"]
-var version = "2.1.0"
+var version = "2.1.1"
 
 client.on('ready', () => {
     console.log(`${client.user.username} est prêt !`)
@@ -130,6 +130,7 @@ client.on('message', msg => {
                                             }).then(msg2 => {
                                                 msg2.react("745999683335225444")
                                             })
+                                            customchannel.send("<@&773911562070130718>")
                                         }
                                     }
                                     msg.channel.send("Merci, ça marche !")
