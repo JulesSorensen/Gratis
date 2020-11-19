@@ -5,7 +5,7 @@ const client = new Discord.Client();
 const fs = require('fs');
 const { TIMEOUT } = require("dns");
 var datachannel = ["773620179866353675"]
-var version = "2.1.1"
+var version = "2.1.2"
 
 client.on('ready', () => {
     console.log(`${client.user.username} est prêt !`)
@@ -26,7 +26,7 @@ client.on('message', msg => {
 
     // announce
     if (msg.content.toLowerCase().startsWith(prefix + "ann")) {
-        if (msg.author.id !== "448052818314526721") return;
+        if (msg.author.id !== "697717795227697173") return;
         const arg = msg.content.slice(prefix.length).split(' ');
         ann = ""
         for (let i = 1; i < arg.length; i++) {
@@ -41,7 +41,7 @@ client.on('message', msg => {
     // game (admins can use it)
     if (msg.content.toLowerCase().startsWith(prefix + "f")) {
         // rights
-        if (msg.author.id !== "448052818314526721") return;
+        if (msg.author.id !== "697717795227697173") return;
         // type
         if (msg.content.toLowerCase().startsWith(prefix + "fdlc")) {
             typedecontenu = "DLC"
