@@ -5,7 +5,7 @@ const client = new Discord.Client();
 const fs = require('fs');
 const { TIMEOUT } = require("dns");
 var datachannel = ["773620179866353675"]
-var version = "2.1.2"
+var version = "2.1.3"
 
 client.on('ready', () => {
     console.log(`${client.user.username} est prêt !`)
@@ -212,5 +212,4 @@ client.on('message', msg => {
 
 })
 
-// client.login(process.env.TOKEN);
-client.login("NzQ1OTU2Mjg1MzkxODMxMTEw.Xz5T7Q.lMNUOad8ZJpPYXT6IUTQCOm-Rls")
+client.login(process.env.TOKEN);
